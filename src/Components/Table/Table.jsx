@@ -4,8 +4,8 @@ import axios from "axios";
 const Table = () => {
 	const [usersState, setUsersState] = useState([]);
 	const [usersToDisplay, setUsersToDisplay] = useState([]);
-    const [sortDirection, setSortDirection] = useState("asc");
-    const [searchTerm, setSearchTerm]= useState("");
+	const [sortDirection, setSortDirection] = useState("asc");
+	const [searchTerm, setSearchTerm] = useState("");
 
 	useEffect(() => {
 		axios
@@ -18,15 +18,18 @@ const Table = () => {
 			.catch((err) => {
 				console.log(err);
 			});
-    }, []);
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        let tempUsers = [...usersState];
-		const filteredUsers = tempUsers.filter(user => {
+	}, []);
+
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		let tempUsers = [...usersState];
+		const filteredUsers = tempUsers.filter((user) => {
 			return user.dob.age.includes(searchTerm);
 		});
-        setUsersState(filteredUsers);
-        
+
+		setUsersState(filteredUsers);
+		console.log("current state:", usersState);
+		console.log("filtered users:", filteredUsers);
 	};
 
 	const sortByCountry = () => {
@@ -73,60 +76,59 @@ const Table = () => {
 	};
 
 	return (
-
-        <>
-        <div className="container">
-			<div className="row">
-				<div className="col w-50 mx-auto">
-					<form onSubmit={handleSubmit}>
-						<input
-							type="text"
-							placeholder="Enter Age to filter"
-							name="searchTerm"
-							value={searchTerm}
-							onChange={(e) => setSearchTerm(e.target.value)}
-						></input>
-						<button type="button" class="btn btn-primary">
-							Search
-						</button>
-					</form>
+		<>
+			<div className="container">
+				<div className="row">
+					<div className="col w-50 mx-auto">
+						<form onSubmit={handleSubmit}>
+							<input
+								type="number"
+								placeholder="Enter Age to filter"
+								name="searchTerm"
+								value={searchTerm}
+								onChange={(e) => setSearchTerm(e.target.value)}
+							></input>
+							<button type="button" class="btn btn-primary">
+								Search
+							</button>
+						</form>
+					</div>
 				</div>
 			</div>
-		</div>
-		<table className="table table-dark table-hover ">
-			<thead>
-				<tr>
-					<th scope="col" onClick={sortByCountry}>
-						Country
-					</th>
-					<th scope="col">Image</th>
-					<th scope="col">Name</th>
-					<th scope="col">Age</th>
-					<th scope="col">Phone</th>
-					<th scope="col">Email</th>
-				</tr>
-			</thead>
-			<tbody>
-				{usersState.map((user, index) => (
-					<tr key={index}>
-						<td>{user.location.country}</td>
-						<td>
-							<img
-								alt={user.name.first}
-								src={user.picture.thumbnail}
-							/>
-						</td>
-						<td>
-							{user.name.first} {user.name.last}
-						</td>
-						<td>{user.dob.age}</td>
-						<td>{user.phone}</td>
-						<td>{user.email}</td>
+			<table className="table table-dark table-hover ">
+				<thead>
+					<tr>
+						<th scope="col" onClick={sortByCountry}>
+							Country
+						</th>
+						<th scope="col">Image</th>
+						<th scope="col">Name</th>
+						<th scope="col">Age</th>
+						<th scope="col">Phone</th>
+						<th scope="col">Email</th>
 					</tr>
-				))}
-			</tbody>
-		</table>
-        </>
+				</thead>
+				<tbody>
+					{usersToDisplay.map((user, index) => (
+						<tr key={index}>
+							<td>{user.location.country}</td>
+							<td>
+								<img
+									alt={user.name.first}
+									src={user.picture.thumbnail}
+								/>
+							</td>
+							<td>
+								{user.name.first} {user.name.last}
+							</td>
+							<td>{user.dob.age}</td>
+							<td>{user.phone}</td>
+							<td>{user.email}</td>
+						</tr>
+					))}
+				</tbody>
+			</table>
+		</>
 	);
 };
 
