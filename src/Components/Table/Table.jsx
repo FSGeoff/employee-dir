@@ -28,8 +28,7 @@ const Table = () => {
 		});
 
 		setUsersState(filteredUsers);
-		console.log("current state:", usersState);
-		console.log("filtered users:", filteredUsers);
+	
 	};
 
 	const sortByCountry = () => {
@@ -57,6 +56,7 @@ const Table = () => {
 		});
 		console.log(tempUsers);
 		setUsersState(sortedUsers);
+		setUsersToDisplay(sortedUsers);
 	};
 	const sortByCountryDesc = () => {
 		let tempUsers = [...usersState];
@@ -73,6 +73,7 @@ const Table = () => {
 		});
 		console.log(tempUsers);
 		setUsersState(sortedUsers);
+		setUsersToDisplay(sortedUsers);
 	};
 
 	return (
