@@ -4,7 +4,8 @@ import axios from "axios";
 const Table = () => {
 	const [usersState, setUsersState] = useState([]);
 	const [usersToDisplay, setUsersToDisplay] = useState([]);
-	const [sortDirection, setSortDirection] = useState("asc");
+    const [sortDirection, setSortDirection] = useState("asc");
+    const [searchTerm, setSearchTerm]= useState("");
 
 	useEffect(() => {
 		axios
@@ -17,7 +18,16 @@ const Table = () => {
 			.catch((err) => {
 				console.log(err);
 			});
-	}, []);
+    }, []);
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        let tempUsers = [...usersState];
+		const filteredUsers = tempUsers.filter(user => {
+			return user.dob.age.includes(searchTerm);
+		});
+        setUsersState(filteredUsers);
+        
+	};
 
 	const sortByCountry = () => {
 		if (sortDirection === "asc") {
@@ -63,6 +73,26 @@ const Table = () => {
 	};
 
 	return (
+
+        <>
+        <div className="container">
+			<div className="row">
+				<div className="col w-50 mx-auto">
+					<form onSubmit={handleSubmit}>
+						<input
+							type="text"
+							placeholder="Enter Age to filter"
+							name="searchTerm"
+							value={searchTerm}
+							onChange={(e) => setSearchTerm(e.target.value)}
+						></input>
+						<button type="button" class="btn btn-primary">
+							Search
+						</button>
+					</form>
+				</div>
+			</div>
+		</div>
 		<table className="table table-dark table-hover ">
 			<thead>
 				<tr>
@@ -96,6 +126,7 @@ const Table = () => {
 				))}
 			</tbody>
 		</table>
+        </>
 	);
 };
 
