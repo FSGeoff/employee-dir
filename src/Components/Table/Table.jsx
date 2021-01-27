@@ -2,18 +2,17 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const Table = () => {
-    const [usersState, setUsersState] = useState([]);
-    const [usersToDisplay, setUsersToDisplay] = useState([]);
-
-
+	const [usersState, setUsersState] = useState([]);
+	const [usersToDisplay, setUsersToDisplay] = useState([]);
+	const [sortDirection, setSortDirection] = useState("asc");
 
 	useEffect(() => {
 		axios
 			.get("https://randomuser.me/api/?results=250")
 			.then((response) => {
 				console.log(response.data.results);
-                setUsersState(response.data.results);
-                setUsersToDisplay(response.data.results);
+				setUsersState(response.data.results);
+				setUsersToDisplay(response.data.results);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -21,7 +20,17 @@ const Table = () => {
 	}, []);
 
 	const sortByCountry = () => {
-        let tempUsers = [...usersState]
+		if (sortDirection === "asc") {
+			sortByCountryAsc();
+			setSortDirection("desc");
+		} else {
+			sortByCountryDesc();
+			setSortDirection("asc");
+		}
+	};
+
+	const sortByCountryAsc = () => {
+		let tempUsers = [...usersState];
 		const sortedUsers = tempUsers.sort((a, b) => {
 			const aVal = a.location.country;
 			const bVal = b.location.country;
@@ -32,9 +41,25 @@ const Table = () => {
 				return 1;
 			}
 			return 0;
-        });
-        console.log(tempUsers);
-        setUsersState(tempUsers);
+		});
+		console.log(tempUsers);
+		setUsersState(sortedUsers);
+	};
+	const sortByCountryDesc = () => {
+		let tempUsers = [...usersState];
+		const sortedUsers = tempUsers.sort((a, b) => {
+			const aVal = a.location.country;
+			const bVal = b.location.country;
+			if (aVal > bVal) {
+				return -1;
+			}
+			if (aVal < bVal) {
+				return 1;
+			}
+			return 0;
+		});
+		console.log(tempUsers);
+		setUsersState(sortedUsers);
 	};
 
 	return (
